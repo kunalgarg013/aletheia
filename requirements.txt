@@ -1,0 +1,24 @@
+# ----------------------------------------------------------
+# A L E T H E I A  –  Core Requirements
+# ----------------------------------------------------------
+
+# Core numerical backbone
+numpy>=1.26
+scipy>=1.13
+
+# Optional visualization (safe to comment out if running headless)
+matplotlib>=3.9
+
+# Data handling utilities
+pandas>=2.2
+
+# Type checking / static analysis (developer ergonomics)
+typing_extensions>=4.12
+
+# --- Future (commented for now) ---
+# jax>=0.4.26           # for accelerated field evolution
+# numba>=0.59.1         # if you prefer JIT instead of JAX
+# torch>=2.3            # only if integrating with ML backends
+# cupy-cuda12x          # GPU acceleration (optional)
+# rich>=13.7            # better CLI output/logging
+# tqdm>=4.66            # progress bars for long runs

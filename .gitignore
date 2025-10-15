@@ -205,3 +205,103 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+# ---------------------------------------------------------
+#   A L E T H E I A   –   G I T I G N O R E
+#   Protect purity: no artifacts, no weights, no noise
+# ---------------------------------------------------------
+
+# -------------------------
+# Core - Python
+# -------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# -------------------------
+# Build / Packaging
+# -------------------------
+build/
+dist/
+*.egg-info/
+*.egg
+
+# -------------------------
+# Logs & Debug
+# -------------------------
+*.log
+logs/
+debug.log
+
+# -------------------------
+# OS Junk
+# -------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+~$*
+
+# -------------------------
+# Simulation & Model Artifacts
+# (NEVER COMMIT HEAVY FILES)
+# -------------------------
+/data/
+/datasets/
+/logs/
+/outputs/
+/results/
+/checkpoints/
+/models/
+/experiments/
+*.h5
+*.ckpt
+*.pt
+*.pth
+*.pkl
+*.npz
+*.npy
+
+# Large archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+
+# -------------------------
+# Local Development
+# -------------------------
+.idea/
+.vscode/
+*.code-workspace
+
+# -------------------------
+# Security Caution
+# -------------------------
+# DO NOT COMMIT:
+# - API keys
+# - Hardware configs
+# - Sensitive paths
+# -------------------------
+*.key
+*.pem
+*.crt
+secrets/
+credentials/
+private_configs/
+
