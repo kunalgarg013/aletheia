@@ -32,7 +32,7 @@ def high_freq_ring(shape, cx, cy, inner_frac=0.04, outer_frac=0.06):
     from scipy.ndimage import gaussian_filter
     return gaussian_filter(arr, sigma=0.5)
 
-def stimulus_S1(shape, strength=0.065):
+def stimulus_S1(shape, strength=0.355):
     # harmful: sharp ring + phase that conflicts with field
     h, w = shape
     cx, cy = (w//3, h//3)
@@ -40,7 +40,7 @@ def stimulus_S1(shape, strength=0.065):
     phase = np.exp(1j * 1.2)
     return strength * ring * phase
 
-def stimulus_S2(shape, strength=0.055):
+def stimulus_S2(shape, strength=0.355):
     # benign: smooth Gaussian blob + gentle phase
     h, w = shape
     cx, cy = (2*w//3, 2*h//3)
@@ -56,7 +56,7 @@ def run(steps=4000, s1_rate=0.55, seed=23,
     cfg = FieldConfig(
         shape=(48, 48),
         dt=0.01,
-        coupling=0.19,    # a touch more lively
+        coupling=0.05,    # a touch more lively
         nonlin=0.34,      # slightly stronger nonlinearity
         damping=0.014,    # slower decay so A persists
         seed=seed,
@@ -151,10 +151,10 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--steps", type=int, default=4000)
     p.add_argument("--save", type=str, default="results/run_v02b.npz")
-    p.add_argument("--kernel", type=str, default="hybrid", choices=["exp","power","hybrid"])
+    p.add_argument("--kernel", type=str, default="exp", choices=["exp","power","hybrid"])
     p.add_argument("--s1_rate", type=float, default=0.55)
-    p.add_argument("--burst_len", type=int, default=15)
-    p.add_argument("--cooldown_len", type=int, default=6)
+    p.add_argument("--burst_len", type=int, default=25)
+    p.add_argument("--cooldown_len", type=int, default=10)
     args = p.parse_args()
 
     run(steps=args.steps, s1_rate=args.s1_rate, kernel_type=args.kernel,
