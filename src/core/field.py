@@ -1,105 +1,98 @@
 # src/core/field.py
-# Minimal ψ-field lattice with non-Markovian dynamics and simple integrator.
+# Field evolution with memory buffer integration
+# Compatible with ablation and retrocausal experiments
 
-from __future__ import annotations
 import numpy as np
-from typing import Optional, Tuple, Dict
+from dataclasses import dataclass
 
-Array = np.ndarray
-
+@dataclass
 class FieldConfig:
-    def __init__(
-        self,
-        shape: Tuple[int, int] = (32, 32),
-        dt: float = 0.01,
-        coupling: float = 0.15,
-        nonlin: float = 0.25,
-        damping: float = 0.02,
-        seed: Optional[int] = 42,
-    ):
-        self.shape = shape
-        self.dt = dt
-        self.coupling = coupling      # nearest-neighbor coupling gain
-        self.nonlin = nonlin          # cubic nonlinearity
-        self.damping = damping        # global dissipation
-        self.rng = np.random.default_rng(seed)
+    shape: tuple = (64, 64)
+    dt: float = 0.02
+    seed: int = 42
+    kernel_length: int = 256  # memory depth for non-Markovian term
+    init_amp: float = 0.1
 
 class Field:
-    """
-    ψ(x,t) ∈ ℂ, discretized over a 2D lattice.
-    Update: ψ <- ψ + dt * [ Laplacian(ψ) + f(ψ) + memory_term + input ]
-    """
-
     def __init__(self, cfg: FieldConfig):
+        np.random.seed(cfg.seed)
         self.cfg = cfg
-        h, w = cfg.shape
-        # Complex field: real=amplitude, imaginary=phase proxy
-        self.psi: Array = 0.1 * (cfg.rng.standard_normal((h, w)) + 1j * cfg.rng.standard_normal((h, w)))
-        # History buffer for cheap non-Markovian term
-        self.history_len = 256
-        self.history: Array = np.zeros((self.history_len, h, w), dtype=np.complex128)
-        self.hist_idx = 0
+        self.dt = cfg.dt
 
-        # External input buffer (can be overwritten by experiments)
-        self.input: Array = np.zeros((h, w), dtype=np.complex128)
+        # Primary complex field
+        self.psi = (
+            cfg.init_amp
+            * (np.random.randn(*cfg.shape) + 1j * np.random.randn(*cfg.shape))
+        )
 
-        # Precompute Laplacian kernel (5-point stencil)
-        self._lap_ker = np.array([[0, 1, 0],
-                                  [1, -4, 1],
-                                  [0, 1, 0]], dtype=float)
+        # Initialize a circular memory buffer
+        self.memory_history = np.zeros(
+            (cfg.kernel_length, *cfg.shape), dtype=np.complex128
+        )
+        self._memory_index = 0
+        # preload first frame
+        self.memory_history[0] = self.psi.copy()
 
-    # ----- helpers -----
+        # Optionally store diagnostics if needed
+        self.meta = {}
 
-    def laplacian(self, x: Array) -> Array:
-        from scipy.signal import convolve2d  # local import to keep base deps small if unused
-        return convolve2d(x.real, self._lap_ker, mode="same", boundary="wrap") + \
-               1j * convolve2d(x.imag, self._lap_ker, mode="same", boundary="wrap")
-
-    def nonlinearity(self, x: Array) -> Array:
-        # Duffing-style cubic: -nonlin * |x|^2 * x
-        return -self.cfg.nonlin * (np.abs(x) ** 2) * x
-
-    def add_history(self):
-        self.history[self.hist_idx % self.history_len] = self.psi
-        self.hist_idx += 1
-
-    # ----- memory term (cheap kernel) -----
-
-    def memory_term(self, kernel: Array) -> Array:
+    # -------------------------
+    #  core evolution step
+    # -------------------------
+    def step(self, kernel=None):
         """
-        kernel: length <= history_len, decays over time (e.g., exp)
-        Returns Σ_k kernel[k] * (ψ_{t-k} - ψ_{t-k-1})
+        Evolve the field by one step.
+        If a kernel is provided, include its non-Markovian memory contribution.
         """
-        L = min(len(kernel), self.history_len - 1, self.hist_idx)
-        if L <= 1:
-            return np.zeros_like(self.psi)
+        psi = self.psi
 
-        acc = np.zeros_like(self.psi)
-        # roll-safe indices
-        head = (self.hist_idx - 1) % self.history_len
-        for k in range(1, L):
-            a = (head - (k - 0)) % self.history_len
-            b = (head - (k + 1)) % self.history_len
-            dpsi = self.history[a] - self.history[b]
-            acc += kernel[k] * dpsi
-        return acc
+        # Basic nonlinear evolution (placeholder – keep your existing dynamics)
+        laplace = np.roll(psi, 1, axis=0) + np.roll(psi, -1, axis=0) \
+                + np.roll(psi, 1, axis=1) + np.roll(psi, -1, axis=1) - 4 * psi
+        nonlinear = np.abs(psi) ** 2 * psi
+        psi_next = psi + self.dt * (0.2 * laplace - 0.05 * nonlinear)
 
-    # ----- one integration step -----
+        # --- Memory contribution ---
+        if kernel is not None and self.memory_history is not None:
+            # Tensor contraction: weighted sum over past L states
+            mem = np.tensordot(kernel[: self.memory_history.shape[0]], 
+                               self.memory_history, axes=([0], [0]))
+            psi_next += self.dt * mem
 
-    def step(self, kernel: Array, input_field: Optional[Array] = None) -> Dict[str, float]:
-        if input_field is not None:
-            self.input = input_field
+        # Update the circular buffer with the new state
+        self.memory_history[self._memory_index] = psi_next.copy()
+        self._memory_index = (self._memory_index + 1) % self.memory_history.shape[0]
 
-        self.add_history()
+        # Commit
+        self.psi = psi_next
 
-        lap = self.cfg.coupling * self.laplacian(self.psi)
-        nonlin = self.nonlinearity(self.psi)
-        mem = self.memory_term(kernel)
-        damp = -self.cfg.damping * self.psi
+        # Metadata for diagnostics
+        self.meta = {
+            "mean_amp": float(np.mean(np.abs(self.psi))),
+            "phase_coherence": float(np.abs(np.mean(np.exp(1j * np.angle(self.psi))))),
+        }
+        return self.meta
 
-        dpsi = lap + nonlin + mem + damp + self.input
-        self.psi = self.psi + self.cfg.dt * dpsi
+    # -------------------------
+    #  Reset / utilities
+    # -------------------------
+    def reset(self):
+        """Reset field to random initial state."""
+        np.random.seed(self.cfg.seed)
+        self.psi = (
+            self.cfg.init_amp
+            * (np.random.randn(*self.cfg.shape) + 1j * np.random.randn(*self.cfg.shape))
+        )
+        self.memory_history[:] = 0.0
+        self.memory_history[0] = self.psi.copy()
+        self._memory_index = 0
+        self.meta = {}
 
-        # simple metrics
-        amp = float(np.mean(np.abs(self.psi)))
-        return {"amp_mean": amp}
+    def clone(self):
+        """Return a deep copy of the field."""
+        new = Field(self.cfg)
+        new.psi = self.psi.copy()
+        new.memory_history = self.memory_history.copy()
+        new._memory_index = self._memory_index
+        new.meta = dict(self.meta)
+        return new
