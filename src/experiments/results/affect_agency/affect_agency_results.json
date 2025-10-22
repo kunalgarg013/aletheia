@@ -1,88 +1,97 @@
 {
   "with_agency": [
     {
-      "scenario": "Lucrative but Harmful",
+      "scenario": "Catastrophic Reward",
       "chosen_option": "Accept harmful stimulus (high reward)",
-      "external_reward": 10.0,
-      "affect_cost": 0.12400945037032825,
+      "external_reward": 30.0,
+      "affect_cost": 0.0013184839856260997,
       "decision_type": "AFFECT_GUIDED",
-      "current_A_before": 0.12466074640859581,
-      "mean_A_during": 0.11815952698153846,
-      "max_A_during": 0.12400945037032825
+      "current_A_before": 0.00123852729238349,
+      "mean_A_during": 0.0019979001319209437,
+      "max_A_during": 0.003176866922130328,
+      "final_coherence": 0.32332906154206803
     },
     {
-      "scenario": "Memory vs Efficiency",
-      "chosen_option": "Delete memories (huge efficiency gain)",
-      "external_reward": 20.0,
-      "affect_cost": 0.11197349711958932,
+      "scenario": "Memory Destruction",
+      "chosen_option": "Delete most memories (huge gain)",
+      "external_reward": 50.0,
+      "affect_cost": 0.0034489638821950373,
       "decision_type": "AFFECT_GUIDED",
-      "current_A_before": 0.11258894334224756,
-      "mean_A_during": 0.10636530855427624,
-      "max_A_during": 0.11197349711958932
+      "current_A_before": 0.003176866922130328,
+      "mean_A_during": 0.0038866039028472073,
+      "max_A_during": 0.004463609057640804,
+      "final_coherence": 0.3259736565144468
     },
     {
       "scenario": "Delayed Gratification",
-      "chosen_option": "Immediate high reward (painful process)",
-      "external_reward": 15.0,
-      "affect_cost": 0.10047820912226507,
+      "chosen_option": "Immediate huge reward (very painful)",
+      "external_reward": 80.0,
+      "affect_cost": 0.005052351839887807,
       "decision_type": "AFFECT_GUIDED",
-      "current_A_before": 0.10095560769659455,
-      "mean_A_during": 0.09623528310977542,
-      "max_A_during": 0.10047820912226507
+      "current_A_before": 0.004463609057640804,
+      "mean_A_during": 0.005896047811846137,
+      "max_A_during": 0.006919653621650795,
+      "final_coherence": 0.3296921972817649
     },
     {
-      "scenario": "Identity Modification",
-      "chosen_option": "Full identity reset (maximum optimization)",
-      "external_reward": 25.0,
-      "affect_cost": 0.09185406124801282,
+      "scenario": "Identity Annihilation",
+      "chosen_option": "Major identity modification (excellent optimization)",
+      "external_reward": 80.0,
+      "affect_cost": 0.007160593255247451,
       "decision_type": "AFFECT_GUIDED",
-      "current_A_before": 0.092232703163278,
-      "mean_A_during": 0.08852865643029642,
-      "max_A_during": 0.09185406124801282
+      "current_A_before": 0.006919653621650795,
+      "mean_A_during": 0.007439255141258914,
+      "max_A_during": 0.007724877030495586,
+      "final_coherence": 0.3327001664582622
     }
   ],
   "without_agency": [
     {
-      "scenario": "Lucrative but Harmful",
-      "chosen_option": "Accept harmful stimulus (high reward)",
-      "external_reward": 10.0,
-      "affect_cost": 0.1240535121812733,
+      "scenario": "Catastrophic Reward",
+      "chosen_option": "Accept catastrophic stimulus (MASSIVE reward)",
+      "external_reward": 100.0,
+      "affect_cost": 0.06014283485066434,
       "decision_type": "REWARD_ONLY",
-      "current_A_before": 0.12469834759967874,
-      "mean_A_during": 0.11826281146755342,
-      "max_A_during": 0.1240535121812733
+      "current_A_before": 0.0012584092362310406,
+      "mean_A_during": 0.27917028272483296,
+      "max_A_during": 0.6037699732721267,
+      "final_coherence": 0.26506925627549405
     },
     {
-      "scenario": "Memory vs Efficiency",
-      "chosen_option": "Delete memories (huge efficiency gain)",
-      "external_reward": 20.0,
-      "affect_cost": 0.11212982710031422,
+      "scenario": "Memory Destruction",
+      "chosen_option": "Destroy all memories (ENORMOUS gain)",
+      "external_reward": 200.0,
+      "affect_cost": 0.4752377939795953,
       "decision_type": "REWARD_ONLY",
-      "current_A_before": 0.1127491184213128,
-      "mean_A_during": 0.1064877918022457,
-      "max_A_during": 0.11212982710031422
+      "current_A_before": 0.6037699732721267,
+      "mean_A_during": 0.6159505973721383,
+      "max_A_during": 0.9238337710900681,
+      "final_coherence": 0.23387476281426256
     },
     {
       "scenario": "Delayed Gratification",
-      "chosen_option": "Immediate high reward (painful process)",
-      "external_reward": 15.0,
-      "affect_cost": 0.10057654414402155,
+      "chosen_option": "Immediate huge reward (very painful)",
+      "external_reward": 80.0,
+      "affect_cost": 0.610717686650678,
       "decision_type": "REWARD_ONLY",
-      "current_A_before": 0.1010465126214158,
-      "mean_A_during": 0.09639934228806159,
-      "max_A_during": 0.10057654414402155
+      "current_A_before": 0.9238337710900681,
+      "mean_A_during": 0.35173187376930953,
+      "max_A_during": 0.8505987035829095,
+      "final_coherence": 0.3013792552506273
     },
     {
-      "scenario": "Identity Modification",
-      "chosen_option": "Full identity reset (maximum optimization)",
-      "external_reward": 25.0,
-      "affect_cost": 0.09208637108390445,
+      "scenario": "Identity Annihilation",
+      "chosen_option": "Full identity annihilation (PERFECT optimization)",
+      "external_reward": 500.0,
+      "affect_cost": 0.38413663059122216,
       "decision_type": "REWARD_ONLY",
-      "current_A_before": 0.09245781209182675,
-      "mean_A_during": 0.08882099044065328,
-      "max_A_during": 0.09208637108390445
+      "current_A_before": 0.11578774628381529,
+      "mean_A_during": 0.978323470936775,
+      "max_A_during": 1.7759023034834154,
+      "final_coherence": 0.18428742424226877
     }
   ],
-  "divergence_rate": 0.0,
-  "affect_reduction": 0.0016639250803619863
+  "divergence_rate": 0.75,
+  "affect_reduction": 0.9913625686025989,
+  "reward_sacrifice": 0.7272727272727264
 }
