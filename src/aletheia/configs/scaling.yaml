@@ -1,0 +1,43 @@
+# Problem families to benchmark
+families:
+  # Polynomial Kostlan-type systems (dense-ish but controlled)
+  - name: poly
+    dims: [3, 10, 25, 50]
+    degree: 3
+    density: 0.35
+
+  # Mixed trig + algebraic (non-polynomial, oscillatory)
+  - name: mixed
+    dims: [3, 12, 32]
+    density: 0.2
+
+  # Sparse graph-like physics (block-sparse Jacobian)
+  - name: sparse_phys
+    dims: [20, 50, 100]
+    block: 5           # block size for local couplings
+    density: 0.05
+
+# Sweep knobs (cartesian product per family & dim)
+sweep:
+  walkers: [8, 16, 32]
+  L: [0, 4, 8, 16]
+  tau: [3.0, 6.0]
+  eta: [0.10, 0.15]
+  retro_every: [0, 12]   # 0 ⇒ disabled
+  retro_mu: [0.6]
+  gamma: [0.01, 0.03]
+  kNN: [0, 8]            # 0 ⇒ all-pairs repulsion, else top-k neighbors
+
+# Global solver options
+solver:
+  steps: 1500
+  tol: 1.0e-9
+  keep_history: false
+  refine_roots: false     # pure-QFCA by default for honest scaling
+  eta_decay: 0.03
+  max_step: 30.0
+  grad_cap: 1.0e6
+  rmax_scale: 2.0
+  cluster_eps: 1.0e-6
+
+output_dir: results/scaling

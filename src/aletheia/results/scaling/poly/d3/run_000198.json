@@ -1,0 +1,33 @@
+{
+  "family": "poly",
+  "dim": 3,
+  "run_id": 198,
+  "config": {
+    "steps": 1500,
+    "eta": 0.05,
+    "lam_mem": 0.6,
+    "L": 8,
+    "tau": 3.0,
+    "gamma": -0.0,
+    "retro_every": 6,
+    "retro_mu": 0.3,
+    "tol": 1e-09,
+    "keep_history": false,
+    "max_step": 30.0,
+    "grad_cap": 1000000.0,
+    "eta_decay": 0.03,
+    "rmax_scale": 2.0,
+    "cluster_eps": 1e-06,
+    "walkers": 16,
+    "refine_roots": false,
+    "kNN": 8
+  },
+  "n_solutions": 3,
+  "final_residuals": [
+    1.447116225399296e-13,
+    3.5132463374475915e-15,
+    8.561975152233574e-10
+  ],
+  "iterations": 361,
+  "success": true
+}
