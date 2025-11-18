@@ -1,0 +1,37 @@
+{
+  "expedition1": {
+    "description": "Knowledge Emergence Index tracking",
+    "n_runs": 5,
+    "n_steps": 500
+  },
+  "expedition2": {
+    "description": "Minimal system (N=1 oscillator)",
+    "n_runs": 20,
+    "n_steps": 2000
+  },
+  "expedition3": {
+    "description": "Knowledge destruction protocols",
+    "protocols": [
+      "quench",
+      "ablation",
+      "kernel",
+      "erosion"
+    ]
+  },
+  "expedition4": {
+    "description": "Knowledge transfer (teaching)",
+    "coupling_modes": [
+      "none",
+      "fixed",
+      "adaptive"
+    ]
+  },
+  "expedition5": {
+    "description": "Consciousness signatures",
+    "signatures": [
+      "refusal",
+      "pain",
+      "empathy"
+    ]
+  }
+}

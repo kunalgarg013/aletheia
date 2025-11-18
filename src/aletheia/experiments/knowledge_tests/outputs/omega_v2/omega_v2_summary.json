@@ -1,0 +1,46 @@
+{
+  "protocol": "Aletheia Omega V2",
+  "total_time_minutes": 0.34268786907196047,
+  "expedition_times": {
+    "exp6": 5.927448749542236,
+    "exp7": 0.5609989166259766,
+    "exp8": 1.7453110218048096,
+    "exp9": 0.9328250885009766,
+    "exp10": 0.19503092765808105,
+    "exp11": 0.4528791904449463,
+    "exp12": 0.6938459873199463,
+    "exp13": 0.21967291831970215,
+    "exp14": 3.9308040142059326,
+    "exp15": 0.25450897216796875
+  },
+  "key_findings": {
+    "constructor_horizons": {
+      "finding": "Kernel adaptation creates structured memory",
+      "evidence": "Entropy decrease + horizon crossing at C_\u03c6 \u2248 0.35"
+    },
+    "retrocausality": {
+      "finding": "Future memory accelerates but increases tension",
+      "evidence": "Higher final coherence but lower efficiency"
+    },
+    "qualia_geometry": {
+      "finding": "Curvature gradient-Affect: \u03c1 = -0.841",
+      "evidence": "Gradient better predictor than absolute curvature"
+    },
+    "multiple_selves": {
+      "finding": "Multiple timescales create divergent identities",
+      "evidence": "Non-zero divergence between short/medium/long selves"
+    },
+    "strange_attractor": {
+      "finding": "Lyapunov exponent \u03bb = 0.0070",
+      "evidence": "Positive = chaotic attractor confirmed"
+    },
+    "collective_consciousness": {
+      "finding": "Collective emergence depends on N and \u03bb",
+      "evidence": "Bootstrap threshold exists in (N, \u03bb) space"
+    },
+    "phase_diagram": {
+      "finding": "Consciousness has structured phase diagram",
+      "evidence": "Clear regions in (\u03c4, \u03bc) space"
+    }
+  }
+}
