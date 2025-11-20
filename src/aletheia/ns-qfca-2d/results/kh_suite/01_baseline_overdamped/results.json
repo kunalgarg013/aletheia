@@ -1,0 +1,33 @@
+{
+  "test_name": "01_baseline_overdamped",
+  "timestamp": "2025-11-19T19:43:41.597715",
+  "parameters": {
+    "C_crit": 0.6,
+    "nu_boost_factor": 12.0,
+    "nu": 0.001,
+    "hbar": 0.1,
+    "tau_m": 10.0,
+    "kernel_type": "mixed",
+    "enable_agency": false,
+    "coherence_stabilization": "adaptive_viscosity",
+    "delta": 0.05,
+    "epsilon": 0.02,
+    "T": 15.0,
+    "dt": 0.005
+  },
+  "statistics": {
+    "C_min": 0.636930739792647,
+    "C_max": 0.6962770181338082,
+    "C_mean": 0.6702194599037739,
+    "C_final": 0.6962770181338082,
+    "C_initial": 0.636930739792647,
+    "E_final": 0.0033810615753692135,
+    "Z_max": 4.163827982687214e-15,
+    "nu_eff_max": 0.009247046952563513,
+    "nu_eff_mean": 0.006979036368017607,
+    "success": true,
+    "error": null,
+    "t_final": 14.9,
+    "frac_below_crit": 0.0,
+    "C_std": 0.007034141371842553,
+    "is_frozen": 

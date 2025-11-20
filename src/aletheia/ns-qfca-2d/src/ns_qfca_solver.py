@@ -29,6 +29,9 @@ class NavierStokesParams:
     nu_boost_factor: float = 10.0
     renorm_strength: float = 0.3
 
+    # Toggle Hamiltonian dynamics (kinetic + nonlinear potential)
+    use_hamiltonian: bool = True
+
     # ---- NEW: Agency / affect gating ----
     enable_agency: bool = False
     A_pause: float = 1e-4
@@ -287,13 +290,17 @@ class NavierStokesQFCA:
                 psi_current = psi_current * damp
                 psi_hat = fft2(psi_current)
         laplacian_psi = ifft2(-self.k2 * psi_hat)
-        
-        # Hamiltonian
-        H_kinetic = -(self.p.hbar**2 / (2 * self.p.m)) * laplacian_psi
-        rho = np.abs(psi_current)**2
-        H_nonlinear = self.p.g * rho * psi_current
-        H_psi = H_kinetic + H_nonlinear
-        
+
+        # Hamiltonian (optional)
+        if self.p.use_hamiltonian:
+            H_kinetic = -(self.p.hbar**2 / (2 * self.p.m)) * laplacian_psi
+            rho = np.abs(psi_current)**2
+            H_nonlinear = self.p.g * rho * psi_current
+            H_psi = H_kinetic + H_nonlinear
+        else:
+            # No Hamiltonian: pure NS + memory
+            H_psi = np.zeros_like(psi_current, dtype=complex)
+
         # Coherence-dependent viscosity
         if self.agency is not None and 'C_phi' in locals():
             pass  # C_phi already computed in agency block
@@ -315,14 +322,14 @@ class NavierStokesQFCA:
                 nu_eff = self.adaptive_viscosity(C_phi)
             else:
                 nu_eff = self.p.nu
-        
+
         viscous_damping = nu_eff * laplacian_psi
-        
+
         # Coherence potential
         if self.p.coherence_stabilization == 'potential':
             V_coh = self.coherence_potential(psi_current)
             H_psi = H_psi + V_coh
-        
+
         # ---- Agency-gated memory ----
         if self.agency is not None and action is not None:
             if action == "REFUSE":
@@ -336,9 +343,9 @@ class NavierStokesQFCA:
         else:
             mem = self.memory_term(psi_current)
         memory_coupling = (self.p.nu / self.p.tau_m) * mem
-        
+
         dpsi_dt = (-1j / self.p.hbar) * H_psi + viscous_damping + memory_coupling
-        
+
         return dpsi_dt, nu_eff
     
     def step_rk4(self, psi: np.ndarray, dt: float) -> np.ndarray:
@@ -397,14 +404,16 @@ class NavierStokesQFCA:
         u, v = self.velocity(psi)
         omega = self.vorticity(u, v)
         rho = np.abs(psi)**2
-        Q = self.quantum_potential(psi)
-        
+        if self.p.use_hamiltonian:
+            Q = self.quantum_potential(psi)
+            self.history['quantum_pressure'].append(float(np.mean(np.abs(Q))))
+        else:
+            self.history['quantum_pressure'].append(0.0)
         self.history['t'].append(t)
         self.history['coherence'].append(self.coherence(psi))
         self.history['energy'].append(self.energy(psi))
         self.history['enstrophy'].append(self.enstrophy(psi))
         self.history['max_vorticity'].append(float(np.max(np.abs(omega))))
-        self.history['quantum_pressure'].append(float(np.mean(np.abs(Q))))
         self.history['rho_min'].append(float(np.min(rho)))
         self.history['rho_max'].append(float(np.max(rho)))
         self.history['nu_effective'].append(self.nu_eff_last)
@@ -424,6 +433,7 @@ class NavierStokesQFCA:
         print(f"Domain: {self.p.N}x{self.p.N}, L={self.p.L}")
         print(f"ν={self.p.nu}, ℏ={self.p.hbar}, τ_m={self.p.tau_m}")
         print(f"Stabilization: {self.p.coherence_stabilization}")
+        print(f"Hamiltonian: {'ENABLED' if self.p.use_hamiltonian else 'DISABLED'}")
         if self.agency is not None:
             print(f"Agency: ENABLED (A_pause={self.p.A_pause:.2e}, A_refuse={self.p.A_refuse:.2e}, A_reframe={self.p.A_reframe:.2e})")
         else:
